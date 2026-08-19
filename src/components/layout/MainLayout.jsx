@@ -2,6 +2,7 @@ import { Outlet } from 'react-router-dom';
 import Header from './Header';
 import Footer from './Footer';
 import ScrollToTopButton from '../ui/ScrollToTopButton';
+import FloatingContact from '../ui/FloatingContact';
 
 const MainLayout = () => {
   return (
@@ -11,6 +12,7 @@ const MainLayout = () => {
         <Outlet />
       </main>
       <Footer />
+      <FloatingContact />
       <ScrollToTopButton />
     </div>
   );

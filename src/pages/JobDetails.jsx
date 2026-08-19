@@ -67,9 +67,6 @@ const JobDetails = () => {
               <Link to={`/jobs/${job._id}/apply`} className="bg-accent hover:bg-accent-hover text-white px-8 py-3 rounded-xl font-bold transition-colors shadow-md text-sm">
                 Apply Now
               </Link>
-              <button className="flex items-center justify-center px-6 border border-gray-200 text-slate-600 font-bold hover:text-accent hover:border-accent rounded-xl transition-colors text-sm">
-                Save Job
-              </button>
             </div>
           </div>
 

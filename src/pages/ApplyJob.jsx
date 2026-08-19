@@ -38,7 +38,8 @@ const ApplyJob = () => {
       Object.keys(formData).forEach(key => data.append(key, formData[key]));
       if (resumeFile) data.append('resume', resumeFile);
 
-      const response = await fetch(`https://jums-sever.onrender.com/api/jobs/${id}/apply`, {
+      const API_URL = import.meta.env.VITE_API_URL || 'https://jums-sever.onrender.com';
+      const response = await fetch(`${API_URL}/api/jobs/${id}/apply`, {
         method: 'POST',
         body: data
       });
@@ -60,7 +61,8 @@ const ApplyJob = () => {
   useEffect(() => {
     const fetchJob = async () => {
       try {
-        const response = await fetch(`https://jums-sever.onrender.com/api/jobs/${id}`);
+        const API_URL = import.meta.env.VITE_API_URL || 'https://jums-sever.onrender.com';
+        const response = await fetch(`${API_URL}/api/jobs/${id}`);
         if (!response.ok) throw new Error('Job not found');
         const data = await response.json();
         setJob(data);

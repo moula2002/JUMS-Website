@@ -1,8 +1,43 @@
+import { useState } from 'react';
 import { MapPin, Phone, Mail, Clock } from 'lucide-react';
 import { FadeIn } from '../components/animations/FadeIn';
 import { StaggerContainer, StaggerItem } from '../components/animations/Stagger';
 
 const Contact = () => {
+  const [formData, setFormData] = useState({ fullName: '', company: '', email: '', phone: '', service: '', message: '' });
+  const [status, setStatus] = useState({ loading: false, success: false, error: null });
+
+  const handleChange = (e) => setFormData({ ...formData, [e.target.id]: e.target.value });
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setStatus({ loading: true, success: false, error: null });
+    
+    try {
+      // Map frontend fields to backend fields
+      const payload = {
+        name: formData.fullName,
+        email: formData.email,
+        subject: formData.service ? `${formData.service} - ${formData.company}` : formData.company,
+        message: `Phone: ${formData.phone}\nCompany: ${formData.company}\n\n${formData.message}`
+      };
+
+      const API_URL = import.meta.env.VITE_API_URL || 'https://jums-sever.onrender.com';
+      const response = await fetch(`${API_URL}/api/forms/contact`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload)
+      });
+
+      const data = await response.json();
+      if (!response.ok) throw new Error(data.message || 'Something went wrong');
+
+      setStatus({ loading: false, success: true, error: null });
+      setFormData({ fullName: '', company: '', email: '', phone: '', service: '', message: '' });
+    } catch (error) {
+      setStatus({ loading: false, success: false, error: error.message });
+    }
+  };
   return (
     <div className="bg-white min-h-screen">
       {/* Page Header */}
@@ -83,7 +118,7 @@ const Contact = () => {
                       </div>
                       <div>
                         <p className="text-xs font-bold text-slate-400 uppercase tracking-wider mb-1">Email Us</p>
-                        <span className="text-sm text-primary font-bold">contact@jumshrs.com</span>
+                        <span className="text-sm text-primary font-bold">info@jumscorps.com</span>
                       </div>
                     </div>
                   </div>
@@ -113,25 +148,32 @@ const Contact = () => {
                   <p className="text-slate-500 text-sm">We typically respond within 2 hours during business days.</p>
                 </div>
                 
-                <form className="space-y-5">
+                <form className="space-y-5" onSubmit={handleSubmit}>
+                  {status.success && <div className="bg-green-50 text-green-700 p-3 rounded-lg text-sm mb-4">Message sent successfully! We will get back to you soon.</div>}
+                  {status.error && <div className="bg-red-50 text-red-700 p-3 rounded-lg text-sm mb-4">{status.error}</div>}
                   <div className="grid sm:grid-cols-2 gap-5">
                     <div className="relative">
                       <input
                         type="text"
                         id="fullName"
+                        value={formData.fullName}
+                        onChange={handleChange}
+                        required
                         placeholder=" "
                         className="peer w-full bg-gray-50/50 border border-gray-200 rounded-xl px-4 py-3.5 text-sm focus:outline-none focus:border-accent focus:bg-white focus:ring-4 focus:ring-accent/10 transition-all duration-300"
                       />
-                      <label htmlFor="fullName" className="absolute left-4 top-3.5 text-slate-400 text-sm transition-all duration-300 peer-focus:-top-2.5 peer-focus:text-xs peer-focus:bg-white peer-focus:px-2 peer-focus:text-accent peer-not-placeholder-shown:-top-2.5 peer-not-placeholder-shown:text-xs peer-not-placeholder-shown:bg-white peer-not-placeholder-shown:px-2 cursor-text">Full Name</label>
+                      <label htmlFor="fullName" className="absolute left-4 top-3.5 text-slate-400 text-sm transition-all duration-300 peer-focus:-top-2.5 peer-focus:text-xs peer-focus:bg-white peer-focus:px-2 peer-focus:text-accent peer-valid:-top-2.5 peer-valid:text-xs peer-valid:bg-white peer-valid:px-2 cursor-text">Full Name</label>
                     </div>
                     <div className="relative">
                       <input
                         type="text"
                         id="company"
+                        value={formData.company}
+                        onChange={handleChange}
                         placeholder=" "
                         className="peer w-full bg-gray-50/50 border border-gray-200 rounded-xl px-4 py-3.5 text-sm focus:outline-none focus:border-accent focus:bg-white focus:ring-4 focus:ring-accent/10 transition-all duration-300"
                       />
-                      <label htmlFor="company" className="absolute left-4 top-3.5 text-slate-400 text-sm transition-all duration-300 peer-focus:-top-2.5 peer-focus:text-xs peer-focus:bg-white peer-focus:px-2 peer-focus:text-accent peer-not-placeholder-shown:-top-2.5 peer-not-placeholder-shown:text-xs peer-not-placeholder-shown:bg-white peer-not-placeholder-shown:px-2 cursor-text">Company Name</label>
+                      <label htmlFor="company" className="absolute left-4 top-3.5 text-slate-400 text-sm transition-all duration-300 peer-focus:-top-2.5 peer-focus:text-xs peer-focus:bg-white peer-focus:px-2 peer-focus:text-accent peer-valid:-top-2.5 peer-valid:text-xs peer-valid:bg-white peer-valid:px-2 cursor-text">Company Name</label>
                     </div>
                   </div>
                   <div className="grid sm:grid-cols-2 gap-5">
@@ -139,23 +181,28 @@ const Contact = () => {
                       <input
                         type="email"
                         id="email"
+                        value={formData.email}
+                        onChange={handleChange}
+                        required
                         placeholder=" "
                         className="peer w-full bg-gray-50/50 border border-gray-200 rounded-xl px-4 py-3.5 text-sm focus:outline-none focus:border-accent focus:bg-white focus:ring-4 focus:ring-accent/10 transition-all duration-300"
                       />
-                      <label htmlFor="email" className="absolute left-4 top-3.5 text-slate-400 text-sm transition-all duration-300 peer-focus:-top-2.5 peer-focus:text-xs peer-focus:bg-white peer-focus:px-2 peer-focus:text-accent peer-not-placeholder-shown:-top-2.5 peer-not-placeholder-shown:text-xs peer-not-placeholder-shown:bg-white peer-not-placeholder-shown:px-2 cursor-text">Email Address</label>
+                      <label htmlFor="email" className="absolute left-4 top-3.5 text-slate-400 text-sm transition-all duration-300 peer-focus:-top-2.5 peer-focus:text-xs peer-focus:bg-white peer-focus:px-2 peer-focus:text-accent peer-valid:-top-2.5 peer-valid:text-xs peer-valid:bg-white peer-valid:px-2 cursor-text">Email Address</label>
                     </div>
                     <div className="relative">
                       <input
                         type="tel"
                         id="phone"
+                        value={formData.phone}
+                        onChange={handleChange}
                         placeholder=" "
                         className="peer w-full bg-gray-50/50 border border-gray-200 rounded-xl px-4 py-3.5 text-sm focus:outline-none focus:border-accent focus:bg-white focus:ring-4 focus:ring-accent/10 transition-all duration-300"
                       />
-                      <label htmlFor="phone" className="absolute left-4 top-3.5 text-slate-400 text-sm transition-all duration-300 peer-focus:-top-2.5 peer-focus:text-xs peer-focus:bg-white peer-focus:px-2 peer-focus:text-accent peer-not-placeholder-shown:-top-2.5 peer-not-placeholder-shown:text-xs peer-not-placeholder-shown:bg-white peer-not-placeholder-shown:px-2 cursor-text">Phone Number</label>
+                      <label htmlFor="phone" className="absolute left-4 top-3.5 text-slate-400 text-sm transition-all duration-300 peer-focus:-top-2.5 peer-focus:text-xs peer-focus:bg-white peer-focus:px-2 peer-focus:text-accent peer-valid:-top-2.5 peer-valid:text-xs peer-valid:bg-white peer-valid:px-2 cursor-text">Phone Number</label>
                     </div>
                   </div>
                   <div className="relative">
-                    <select id="service" defaultValue="" className="peer w-full bg-gray-50/50 border border-gray-200 rounded-xl px-4 py-3.5 text-sm focus:outline-none focus:border-accent focus:bg-white focus:ring-4 focus:ring-accent/10 transition-all duration-300 text-slate-600 appearance-none">
+                    <select id="service" value={formData.service} onChange={handleChange} className="peer w-full bg-gray-50/50 border border-gray-200 rounded-xl px-4 py-3.5 text-sm focus:outline-none focus:border-accent focus:bg-white focus:ring-4 focus:ring-accent/10 transition-all duration-300 text-slate-600 appearance-none">
                       <option value="" disabled hidden></option>
                       <option value="recruitment">Recruitment & Staffing</option>
                       <option value="consulting">HR Consulting</option>
@@ -170,17 +217,21 @@ const Contact = () => {
                   <div className="relative">
                     <textarea
                       id="message"
+                      value={formData.message}
+                      onChange={handleChange}
+                      required
                       placeholder=" "
                       rows="4"
                       className="peer w-full bg-gray-50/50 border border-gray-200 rounded-xl px-4 py-3.5 text-sm focus:outline-none focus:border-accent focus:bg-white focus:ring-4 focus:ring-accent/10 transition-all duration-300 resize-none"
                     ></textarea>
-                    <label htmlFor="message" className="absolute left-4 top-3.5 text-slate-400 text-sm transition-all duration-300 peer-focus:-top-2.5 peer-focus:text-xs peer-focus:bg-white peer-focus:px-2 peer-focus:text-accent peer-not-placeholder-shown:-top-2.5 peer-not-placeholder-shown:text-xs peer-not-placeholder-shown:bg-white peer-not-placeholder-shown:px-2 cursor-text">How can we help you?</label>
+                    <label htmlFor="message" className="absolute left-4 top-3.5 text-slate-400 text-sm transition-all duration-300 peer-focus:-top-2.5 peer-focus:text-xs peer-focus:bg-white peer-focus:px-2 peer-focus:text-accent peer-valid:-top-2.5 peer-valid:text-xs peer-valid:bg-white peer-valid:px-2 cursor-text">How can we help you?</label>
                   </div>
                   <button
-                    type="button"
-                    className="w-full bg-gradient-to-r from-primary to-primary-light hover:from-accent hover:to-accent-hover text-white px-8 py-4 rounded-xl font-bold text-sm transition-all duration-300 shadow-lg shadow-primary/20 hover:shadow-accent/30 hover:-translate-y-1"
+                    type="submit"
+                    disabled={status.loading}
+                    className="w-full bg-gradient-to-r from-primary to-primary-light hover:from-accent hover:to-accent-hover disabled:opacity-50 text-white px-8 py-4 rounded-xl font-bold text-sm transition-all duration-300 shadow-lg shadow-primary/20 hover:shadow-accent/30 hover:-translate-y-1 flex justify-center items-center"
                   >
-                    Send Message
+                    {status.loading ? 'Sending...' : 'Send Message'}
                   </button>
                 </form>
               </div>

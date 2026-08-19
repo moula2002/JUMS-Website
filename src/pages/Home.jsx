@@ -42,19 +42,19 @@ const Home = () => {
                 {/* Floating Stats Overlay */}
                 <div className="absolute inset-0 bg-primary/40 p-6 flex flex-col justify-end">
                   <div className="grid grid-cols-2 gap-4">
-                    <div className="bg-white/90 backdrop-blur-sm p-4 rounded-xl border border-white/50">
+                    <div className="bg-white/95 p-4 rounded-xl border border-white/50">
                       <p className="text-3xl font-extrabold text-accent">500+</p>
                       <p className="text-xs font-bold text-primary uppercase tracking-wider">Companies Served</p>
                     </div>
-                    <div className="bg-white/90 backdrop-blur-sm p-4 rounded-xl border border-white/50">
+                    <div className="bg-white/95 p-4 rounded-xl border border-white/50">
                       <p className="text-3xl font-extrabold text-accent">10,000+</p>
                       <p className="text-xs font-bold text-primary uppercase tracking-wider">Candidates Placed</p>
                     </div>
-                    <div className="bg-white/90 backdrop-blur-sm p-4 rounded-xl border border-white/50">
+                    <div className="bg-white/95 p-4 rounded-xl border border-white/50">
                       <p className="text-3xl font-extrabold text-accent">15+</p>
                       <p className="text-xs font-bold text-primary uppercase tracking-wider">Years Experience</p>
                     </div>
-                    <div className="bg-white/90 backdrop-blur-sm p-4 rounded-xl border border-white/50">
+                    <div className="bg-white/95 p-4 rounded-xl border border-white/50">
                       <p className="text-3xl font-extrabold text-accent">98%</p>
                       <p className="text-xs font-bold text-primary uppercase tracking-wider">Client Satisfaction</p>
                     </div>
@@ -87,8 +87,8 @@ const Home = () => {
               { icon: HeartHandshake, title: "Workforce Outsourcing", desc: "Flexible staffing solutions for temporary and permanent requirements." }
             ].map((service, i) => (
               <StaggerItem key={i}>
-                <div className="bg-white p-8 rounded-2xl border border-gray-100 shadow-sm hover:shadow-xl hover:-translate-y-2 transition-all duration-300 h-full group relative overflow-hidden">
-                  <div className="absolute top-0 left-0 w-full h-1 bg-accent transform origin-left scale-x-0 group-hover:scale-x-100 transition-transform duration-300"></div>
+                <div className="bg-white p-8 rounded-2xl border border-gray-100 shadow-sm hover:shadow-xl hover:-translate-y-2 transition-all duration-300 h-full group relative overflow-hidden transform-gpu will-change-transform">
+                  <div className="absolute top-0 left-0 w-full h-1 bg-accent transform-gpu origin-left scale-x-0 group-hover:scale-x-100 transition-transform duration-300 will-change-transform"></div>
                   <div className="w-14 h-14 bg-primary/5 rounded-xl flex items-center justify-center text-primary mb-6 group-hover:bg-primary group-hover:text-white transition-colors duration-300">
                     <service.icon className="w-7 h-7" />
                   </div>
@@ -130,9 +130,9 @@ const Home = () => {
                 ))}
               </div>
             </FadeIn>
-            <FadeIn direction="left" className="relative h-full">
+            <FadeIn direction="left" className="relative h-full transform-gpu will-change-transform">
               <div className="rounded-3xl overflow-hidden shadow-2xl h-full min-h-[500px]">
-                <img src="/images/services-bg.jpg" alt="Team collaborating" className="w-full h-full object-cover" />
+                <img src="/images/about-who.jpg" alt="Team collaborating" className="w-full h-full object-cover transform-gpu" />
               </div>
             </FadeIn>
           </div>
@@ -142,7 +142,7 @@ const Home = () => {
       {/* 5. INDUSTRIES WE SERVE */}
       <section className="py-24 bg-primary text-white relative overflow-hidden">
         {/* Background elements */}
-        <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-accent/20 rounded-full blur-[100px] -translate-y-1/2 translate-x-1/3"></div>
+        <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-accent/20 rounded-full blur-[100px] -translate-y-1/2 translate-x-1/3 pointer-events-none transform-gpu"></div>
         
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
           <FadeIn className="text-center mb-16">
@@ -160,7 +160,7 @@ const Home = () => {
               "Logistics & Supply Chain"
             ].map((industry, i) => (
               <StaggerItem key={i}>
-                <div className="bg-white/10 backdrop-blur-md border border-white/20 p-6 rounded-xl text-center hover:bg-accent hover:border-accent transition-all duration-300 cursor-pointer h-full flex items-center justify-center">
+                <div className="bg-white/15 border border-white/20 p-6 rounded-xl text-center hover:bg-accent hover:border-accent transition-colors duration-300 cursor-pointer h-full flex items-center justify-center transform-gpu hover:scale-105">
                   <h4 className="font-bold text-sm lg:text-base">{industry}</h4>
                 </div>
               </StaggerItem>
@@ -262,7 +262,7 @@ const Home = () => {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-8 text-center">
           <p className="text-sm font-bold text-slate-500 uppercase tracking-widest">Trusted By</p>
         </div>
-        <div className="flex space-x-12 animate-[marquee_20s_linear_infinite] whitespace-nowrap opacity-50 grayscale hover:grayscale-0 transition-all duration-500">
+        <div className="flex space-x-12 animate-[marquee_20s_linear_infinite] whitespace-nowrap opacity-50 grayscale hover:grayscale-0 transition-colors duration-500 transform-gpu will-change-transform">
           {[...Array(2)].map((_, i) => (
             <div key={i} className="flex space-x-12 items-center">
               <span className="text-3xl font-black text-gray-400">CORPORATE</span>
@@ -291,8 +291,8 @@ const Home = () => {
             ].map((title, i) => (
               <StaggerItem key={i}>
                 <div className="bg-white rounded-2xl overflow-hidden shadow-sm border border-gray-100 group cursor-pointer h-full flex flex-col">
-                  <div className="h-40 bg-gray-200 overflow-hidden">
-                    <img src={['/images/blog-1.jpg', '/images/blog-2.jpg', '/images/services-bg.jpg', '/images/testimonials-bg.jpg'][i]} alt="Blog thumbnail" className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" />
+                  <div className="h-40 bg-gray-200 overflow-hidden transform-gpu">
+                    <img src={['/images/blog-1.jpg', '/images/blog-2.jpg', '/images/blog-3.jpg', '/images/blog-4.jpg'][i]} alt="Blog thumbnail" className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500 will-change-transform" />
                   </div>
                   <div className="p-6 flex-grow flex flex-col justify-between">
                     <div>
@@ -308,26 +308,7 @@ const Home = () => {
         </div>
       </section>
 
-      {/* 11. CALL TO ACTION */}
-      <section className="py-24 bg-primary relative overflow-hidden">
-        {/* Background Pattern */}
-        <div className="absolute inset-0 opacity-10" style={{ backgroundImage: 'radial-gradient(#FF6B00 2px, transparent 2px)', backgroundSize: '30px 30px' }}></div>
-        
-        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 text-center">
-          <FadeIn>
-            <h2 className="text-4xl md:text-5xl font-bold text-white mb-6">Ready to Build a Stronger Workforce?</h2>
-            <p className="text-xl text-gray-300 mb-10">Partner with our HR experts and discover customized solutions that drive business growth.</p>
-            <div className="flex flex-wrap justify-center gap-4">
-              <Link to="/contact" className="bg-accent hover:bg-accent-hover text-white px-8 py-4 rounded-md font-bold transition-colors shadow-lg shadow-accent/30 text-lg">
-                Schedule Consultation
-              </Link>
-              <Link to="/contact" className="bg-white/10 hover:bg-white/20 border border-white/30 text-white px-8 py-4 rounded-md font-bold transition-colors text-lg">
-                Contact Our Team
-              </Link>
-            </div>
-          </FadeIn>
-        </div>
-      </section>
+
 
     </div>
   );

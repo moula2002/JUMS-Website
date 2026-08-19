@@ -1,16 +1,72 @@
+import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { Search, MapPin, Briefcase, Clock, ChevronRight, CheckCircle2 } from 'lucide-react';
 import { FadeIn } from '../components/animations/FadeIn';
 import { StaggerContainer, StaggerItem } from '../components/animations/Stagger';
 
 const Jobs = () => {
-  const jobsList = [
-    { id: 1, title: 'HR Executive', type: 'Full Time', location: 'Multiple', experience: '1-3 Years' },
-    { id: 2, title: 'Talent Acquisition Specialist', type: 'Full Time', location: 'Multiple', experience: '2-5 Years' },
-    { id: 3, title: 'HR Manager', type: 'Full Time', location: 'Multiple', experience: '5-8 Years' },
-    { id: 4, title: 'Payroll Executive', type: 'Full Time', location: 'Multiple', experience: '2-4 Years' },
-    { id: 5, title: 'Recruiter', type: 'Full Time', location: 'Multiple', experience: '1-3 Years' },
-  ];
+  const [jobsList, setJobsList] = useState([]);
+  const [loading, setLoading] = useState(true);
+  
+  const [keyword, setKeyword] = useState('');
+  const [category, setCategory] = useState('All Categories');
+  const [location, setLocation] = useState('All Locations');
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
+  const [categoriesList, setCategoriesList] = useState([]);
+  const [totalJobsCount, setTotalJobsCount] = useState(0);
+
+  const fetchJobs = async () => {
+    setLoading(true);
+    try {
+      const queryParams = new URLSearchParams({
+        page: currentPage,
+        limit: 5,
+        ...(keyword && { keyword }),
+        ...(category !== 'All Categories' && { category }),
+        ...(location !== 'All Locations' && { location })
+      });
+      const response = await fetch(`http://localhost:5000/api/jobs?${queryParams}`);
+      if (response.ok) {
+        const data = await response.json();
+        setJobsList(data.jobs || []);
+        setTotalPages(data.totalPages || 1);
+      }
+    } catch (error) {
+      console.error('Error fetching jobs:', error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const fetchCategories = async () => {
+    try {
+      const response = await fetch('http://localhost:5000/api/jobs/categories');
+      if (response.ok) {
+        const data = await response.json();
+        setCategoriesList(data.categories || []);
+        setTotalJobsCount(data.total || 0);
+      }
+    } catch (error) {
+      console.error('Error fetching categories:', error);
+    }
+  };
+
+  useEffect(() => {
+    fetchJobs();
+  }, [currentPage]);
+
+  useEffect(() => {
+    fetchCategories();
+  }, []);
+
+  const handleSearch = () => {
+    if (currentPage === 1) {
+      fetchJobs();
+    } else {
+      setCurrentPage(1); // Setting state triggers the effect to fetchJobs
+    }
+  };
 
   return (
     <div className="bg-gray-50 min-h-screen pb-20">
@@ -38,27 +94,26 @@ const Jobs = () => {
           <div className="bg-white p-2 md:p-3 rounded-2xl md:rounded-full shadow-lg border border-gray-100 flex flex-col md:flex-row gap-2 md:gap-4 mb-12">
             <div className="flex-1 flex items-center bg-gray-50 rounded-xl md:rounded-full px-5 py-3.5 border-none">
               <Search className="text-gray-400 w-5 h-5 mr-3 flex-shrink-0" />
-              <input type="text" placeholder="Job Title / Keywords" className="w-full bg-transparent focus:outline-none text-sm text-slate-700 font-medium placeholder:font-normal" />
+              <input type="text" placeholder="Job Title / Keywords" className="w-full bg-transparent focus:outline-none text-sm text-slate-700 font-medium placeholder:font-normal" value={keyword} onChange={(e) => setKeyword(e.target.value)} onKeyDown={(e) => e.key === 'Enter' && handleSearch()} />
             </div>
             <div className="hidden md:block w-px bg-gray-200 h-8 self-center"></div>
             <div className="flex-1 flex items-center bg-gray-50 md:bg-transparent rounded-xl md:rounded-full px-5 py-3.5 border-none">
               <Briefcase className="text-gray-400 w-5 h-5 mr-3 flex-shrink-0" />
-              <select className="w-full bg-transparent focus:outline-none text-sm text-slate-700 appearance-none font-medium">
-                <option>All Categories</option>
-                <option>Recruitment</option>
-                <option>Payroll</option>
+              <select className="w-full bg-transparent focus:outline-none text-sm text-slate-700 appearance-none font-medium" value={category} onChange={(e) => setCategory(e.target.value)}>
+                <option value="All Categories">All Categories</option>
+                {categoriesList.map(c => <option key={c.name} value={c.name}>{c.name}</option>)}
               </select>
             </div>
             <div className="hidden md:block w-px bg-gray-200 h-8 self-center"></div>
             <div className="flex-1 flex items-center bg-gray-50 md:bg-transparent rounded-xl md:rounded-full px-5 py-3.5 border-none">
               <MapPin className="text-gray-400 w-5 h-5 mr-3 flex-shrink-0" />
-              <select className="w-full bg-transparent focus:outline-none text-sm text-slate-700 appearance-none font-medium">
-                <option>All Locations</option>
-                <option>Chennai</option>
-                <option>Bangalore</option>
+              <select className="w-full bg-transparent focus:outline-none text-sm text-slate-700 appearance-none font-medium" value={location} onChange={(e) => setLocation(e.target.value)}>
+                <option value="All Locations">All Locations</option>
+                <option value="Chennai">Chennai</option>
+                <option value="Bangalore">Bangalore</option>
               </select>
             </div>
-            <button className="bg-accent hover:bg-accent-hover text-white px-8 py-3.5 rounded-xl md:rounded-full font-bold transition-colors shadow-md md:ml-2">
+            <button onClick={handleSearch} className="bg-accent hover:bg-accent-hover text-white px-8 py-3.5 rounded-xl md:rounded-full font-bold transition-colors shadow-md md:ml-2">
               Search Jobs
             </button>
           </div>
@@ -68,8 +123,12 @@ const Jobs = () => {
 
           {/* Jobs List (Left) */}
           <StaggerContainer className="lg:col-span-2 space-y-4">
-            {jobsList.map(job => (
-              <StaggerItem key={job.id}>
+            {loading ? (
+              <div className="text-center py-10 text-slate-500 font-semibold">Loading jobs...</div>
+            ) : jobsList.length === 0 ? (
+              <div className="text-center py-10 text-slate-500 font-semibold">No jobs found.</div>
+            ) : jobsList.map(job => (
+              <StaggerItem key={job._id || job.id}>
                 <div className="bg-white p-6 rounded-2xl border border-gray-100 shadow-sm hover:shadow-md transition-shadow flex flex-col sm:flex-row sm:items-center justify-between gap-6">
                   <div className="flex items-start gap-5">
                     <div className="w-14 h-14 bg-accent/5 rounded-xl flex items-center justify-center text-accent flex-shrink-0 border border-accent/10">
@@ -84,7 +143,7 @@ const Jobs = () => {
                       </div>
                     </div>
                   </div>
-                  <Link to={`/jobs/${job.id}`} className="text-accent font-bold text-sm flex items-center gap-1 hover:text-accent-hover whitespace-nowrap bg-accent/10 px-4 py-2 rounded-lg">
+                  <Link to={`/jobs/${job._id || job.id}`} className="text-accent font-bold text-sm flex items-center gap-1 hover:text-accent-hover whitespace-nowrap bg-accent/10 px-4 py-2 rounded-lg">
                     View Details
                   </Link>
                 </div>
@@ -92,16 +151,28 @@ const Jobs = () => {
             ))}
 
             {/* Pagination */}
-            <FadeIn>
-              <div className="flex justify-center items-center gap-2 mt-12">
-                <button className="w-10 h-10 flex items-center justify-center rounded-xl bg-accent text-white font-bold shadow-md">1</button>
-                <button className="w-10 h-10 flex items-center justify-center rounded-xl bg-white text-slate-600 border border-gray-200 hover:bg-gray-50 font-semibold">2</button>
-                <button className="w-10 h-10 flex items-center justify-center rounded-xl bg-white text-slate-600 border border-gray-200 hover:bg-gray-50 font-semibold">3</button>
-                <span className="text-slate-400 px-2">...</span>
-                <button className="w-10 h-10 flex items-center justify-center rounded-xl bg-white text-slate-600 border border-gray-200 hover:bg-gray-50 font-semibold">5</button>
-                <button className="px-4 h-10 flex items-center justify-center rounded-xl bg-white text-primary border border-gray-200 hover:bg-gray-50 text-sm font-bold ml-2">Next</button>
-              </div>
-            </FadeIn>
+            {totalPages > 1 && (
+              <FadeIn>
+                <div className="flex justify-center items-center gap-2 mt-12">
+                  {Array.from({ length: totalPages }, (_, i) => i + 1).map(page => (
+                    <button 
+                      key={page} 
+                      onClick={() => setCurrentPage(page)}
+                      className={`w-10 h-10 flex items-center justify-center rounded-xl font-bold shadow-sm transition-colors ${currentPage === page ? 'bg-accent text-white' : 'bg-white text-slate-600 border border-gray-200 hover:bg-gray-50'}`}
+                    >
+                      {page}
+                    </button>
+                  ))}
+                  <button 
+                    onClick={() => setCurrentPage(p => Math.min(totalPages, p + 1))}
+                    disabled={currentPage === totalPages}
+                    className="px-4 h-10 flex items-center justify-center rounded-xl bg-white text-primary border border-gray-200 hover:bg-gray-50 text-sm font-bold ml-2 disabled:opacity-50"
+                  >
+                    Next
+                  </button>
+                </div>
+              </FadeIn>
+            )}
           </StaggerContainer>
 
           {/* Sidebar (Right) */}
@@ -110,20 +181,21 @@ const Jobs = () => {
             <div className="bg-white p-8 rounded-2xl border border-gray-100 shadow-sm">
               <h3 className="text-lg font-bold text-primary mb-6">Job Categories</h3>
               <ul className="space-y-4">
-                <li className="flex justify-between items-center text-accent font-semibold text-sm">
+                <li 
+                  onClick={() => { setCategory('All Categories'); handleSearch(); }}
+                  className={`flex justify-between items-center font-semibold text-sm cursor-pointer transition-colors ${category === 'All Categories' ? 'text-accent' : 'text-slate-600 hover:text-accent'}`}
+                >
                   <span className="flex items-center gap-2">All Categories</span>
-                  <span className="bg-accent/10 px-2.5 py-0.5 rounded-full text-xs">26</span>
+                  <span className={`${category === 'All Categories' ? 'bg-accent/10 text-accent' : 'bg-gray-50 border-gray-100 text-slate-500'} px-2.5 py-0.5 rounded-full text-xs border`}>{totalJobsCount}</span>
                 </li>
-                {[
-                  { name: 'HR', count: 6 },
-                  { name: 'Recruitment', count: 8 },
-                  { name: 'Payroll', count: 4 },
-                  { name: 'Training', count: 3 },
-                  { name: 'Others', count: 5 }
-                ].map((cat, idx) => (
-                  <li key={idx} className="flex justify-between items-center text-slate-600 hover:text-accent transition-colors cursor-pointer text-sm font-medium">
+                {categoriesList.map((cat, idx) => (
+                  <li 
+                    key={idx} 
+                    onClick={() => { setCategory(cat.name); handleSearch(); }}
+                    className={`flex justify-between items-center cursor-pointer text-sm font-medium transition-colors ${category === cat.name ? 'text-accent' : 'text-slate-600 hover:text-accent'}`}
+                  >
                     <span className="flex items-center gap-2">{cat.name}</span>
-                    <span className="bg-gray-50 border border-gray-100 px-2.5 py-0.5 rounded-full text-xs text-slate-500">{cat.count}</span>
+                    <span className={`${category === cat.name ? 'bg-accent/10 text-accent' : 'bg-gray-50 border-gray-100 text-slate-500'} border px-2.5 py-0.5 rounded-full text-xs`}>{cat.count}</span>
                   </li>
                 ))}
               </ul>

@@ -17,14 +17,8 @@ const Header = () => {
 
   const navLinks = [
     { name: 'Home', path: '/' },
-    {
-      name: 'Company',
-      path: '#',
-      dropdown: [
-        { name: 'About Us', path: '/about' },
-        { name: 'Careers', path: '/jobs' }
-      ]
-    },
+    { name: 'About Us', path: '/about' },
+    { name: 'Careers', path: '/jobs' },
     {
       name: 'Services',
       path: '/services',
@@ -39,27 +33,24 @@ const Header = () => {
       path: '#',
       dropdown: [
         { name: 'Resources', path: '/resources' },
-        { name: 'Testimonials', path: '/#testimonials' },
-        { name: 'Blog', path: '/#blog' }
+        { name: 'Testimonials', path: '/testimonials' },
+        { name: 'Blogs', path: '/blog' }
       ]
     },
     { name: 'Contact Us', path: '/contact' },
   ];
 
   return (
-    <header className={`sticky top-0 z-50 w-full transition-all duration-300 border-t-4 border-t-accent ${
-      isScrolled ? 'bg-white shadow-md border-b border-gray-100' : 'bg-white/80 md:bg-white/95 backdrop-blur-md'
-    }`}>
+    <header className={`sticky top-0 z-50 w-full transition-all duration-300 border-t-4 border-t-accent ${isScrolled ? 'bg-white shadow-md border-b border-gray-100' : 'bg-white/95 md:bg-white/100'
+      }`}>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className={`flex justify-between items-center transition-all duration-300 ${
-          isScrolled ? 'h-20' : 'h-28'
-        }`}>
+        <div className={`flex justify-between items-center transition-all duration-300 ${isScrolled ? 'h-20' : 'h-28'
+          }`}>
           {/* Logo */}
           <div className="flex-shrink-0 flex items-center">
             <Link to="/" className="flex items-center">
-              <img src={logo} alt="JUMS Logo" className={`w-48 md:w-52 h-auto object-contain transition-all duration-300 ${
-                isScrolled ? 'scale-90' : 'scale-100'
-              }`} />
+              <img src={logo} alt="JUMS Logo" className={`w-48 md:w-52 h-auto object-contain transition-all duration-300 ${isScrolled ? 'scale-90' : 'scale-100'
+                }`} />
             </Link>
           </div>
 

@@ -107,7 +107,7 @@ const About = () => {
 
             <FadeIn>
               <div className="grid md:grid-cols-2 gap-8 text-left relative z-10">
-                <div className="bg-white/10 p-8 rounded-2xl backdrop-blur-sm border border-white/20 hover:bg-white/20 transition-all duration-300">
+                <div className="bg-white/15 p-8 rounded-2xl border border-white/20 hover:bg-white/25 transition-all duration-300">
                   <div className="w-12 h-12 bg-accent rounded-full flex items-center justify-center mb-6 shadow-lg shadow-accent/30">
                     <svg className="w-6 h-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
@@ -118,7 +118,7 @@ const About = () => {
                     To empower organizations through innovative HR solutions. We are dedicated to providing strategic talent acquisition, payroll management, and compliance support that drives sustainable business growth.
                   </p>
                 </div>
-                <div className="bg-white/10 p-8 rounded-2xl backdrop-blur-sm border border-white/20 hover:bg-white/20 transition-all duration-300">
+                <div className="bg-white/15 p-8 rounded-2xl border border-white/20 hover:bg-white/25 transition-all duration-300">
                   <div className="w-12 h-12 bg-accent rounded-full flex items-center justify-center mb-6 shadow-lg shadow-accent/30">
                     <svg className="w-6 h-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />

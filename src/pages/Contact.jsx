@@ -7,16 +7,24 @@ const Contact = () => {
     <div className="bg-white min-h-screen">
       {/* Page Header */}
       <section className="bg-primary relative pt-16 pb-20 px-4 border-t border-white/10 overflow-hidden">
-        <div className="absolute inset-0 bg-[url('/images/contact-bg.jpg')] bg-cover bg-center opacity-10 mix-blend-luminosity"></div>
+        <div className="absolute inset-0 bg-gradient-to-r from-primary to-accent opacity-90 mix-blend-multiply"></div>
+        <div className="absolute inset-0 bg-[url('/images/contact-bg.jpg')] bg-cover bg-center opacity-30 mix-blend-luminosity"></div>
         <div className="max-w-7xl mx-auto flex flex-col md:flex-row items-start md:items-center justify-between relative z-10 gap-6">
-          <FadeIn direction="none">
-            <h1 className="text-4xl md:text-5xl font-bold text-white mb-4">Get In Touch</h1>
-            <p className="text-gray-400 font-medium text-sm">Home <span className="mx-2 text-gray-600">/</span> Contact Us</p>
+          <FadeIn direction="up">
+            <span className="inline-block px-3 py-1 bg-white/20 backdrop-blur-md border border-white/30 text-white rounded-full text-xs font-bold tracking-widest uppercase mb-4">Contact Us</span>
+            <h1 className="text-4xl md:text-5xl lg:text-6xl font-black text-white mb-4 tracking-tight drop-shadow-md">Get In Touch</h1>
+            <p className="text-white/80 font-medium text-sm flex items-center gap-2">
+              <span className="hover:text-white transition-colors cursor-pointer">Home</span> 
+              <span className="w-1.5 h-1.5 rounded-full bg-accent"></span> 
+              <span className="text-white">Contact Us</span>
+            </p>
           </FadeIn>
           <FadeIn delay={0.2} direction="left">
-            <p className="text-gray-300 max-w-md text-sm leading-relaxed border-l-2 border-accent pl-4">
-              Have a question or need assistance with your HR operations? Our dedicated talent acquisition team is ready to help you.
-            </p>
+            <div className="bg-white/10 backdrop-blur-md border border-white/20 p-6 rounded-2xl max-w-md shadow-2xl">
+              <p className="text-white text-sm leading-relaxed">
+                Have a question or need assistance with your HR operations? Our dedicated talent acquisition team is ready to help you drive your business forward.
+              </p>
+            </div>
           </FadeIn>
         </div>
       </section>
@@ -29,44 +37,66 @@ const Contact = () => {
             {/* Left Side: Map and Contact Details */}
             <FadeIn direction="right" className="space-y-8">
               {/* Map Container */}
-              <div className="bg-gray-100 rounded-lg overflow-hidden h-[300px] shadow-sm relative border border-gray-200">
+              <div className="bg-gray-100 rounded-2xl overflow-hidden h-[350px] shadow-lg relative border border-gray-100 group">
                 <img
                   src="/images/contact-map.jpg"
                   alt="Bengaluru Office Location"
-                  className="w-full h-full object-cover opacity-80 mix-blend-luminosity"
+                  className="w-full h-full object-cover opacity-90 group-hover:scale-110 transition-transform duration-700 ease-in-out"
                 />
+                <div className="absolute inset-0 bg-gradient-to-t from-primary/80 via-transparent to-transparent opacity-60"></div>
+                
                 {/* Map Controls Mockup */}
-                <div className="absolute top-4 left-4 bg-white rounded shadow flex text-xs font-medium">
-                  <div className="px-3 py-1.5 border-r border-gray-200">Map</div>
-                  <div className="px-3 py-1.5 text-gray-500">Satellite</div>
+                <div className="absolute top-4 left-4 bg-white/90 backdrop-blur-sm rounded-lg shadow-lg flex text-xs font-bold border border-white/50 overflow-hidden transform-gpu hover:scale-105 transition-transform cursor-pointer">
+                  <div className="px-4 py-2 bg-primary text-white">Map</div>
+                  <div className="px-4 py-2 text-primary hover:bg-gray-50 transition-colors">Satellite</div>
                 </div>
-                <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-accent">
-                  <MapPin className="w-8 h-8 fill-accent text-white drop-shadow-md" />
-                  <div className="bg-white px-2 py-1 rounded shadow-md text-xs font-bold text-primary absolute -top-8 left-1/2 -translate-x-1/2">Bengaluru</div>
+                
+                <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 flex flex-col items-center">
+                  <div className="bg-white px-4 py-2 rounded-lg shadow-xl text-xs font-bold text-primary mb-2 animate-bounce">Bengaluru HQ</div>
+                  <div className="relative">
+                    <MapPin className="w-10 h-10 fill-accent text-white drop-shadow-xl relative z-10" />
+                    <div className="absolute inset-0 bg-accent rounded-full animate-ping opacity-40"></div>
+                  </div>
                 </div>
               </div>
 
               {/* Contact Details */}
-              <div>
-                <h3 className="font-bold text-primary text-lg mb-4">Contact Details</h3>
-                <div className="grid sm:grid-cols-2 gap-6">
-                  <div className="space-y-3">
-                    <div className="flex items-center gap-3">
-                      <Phone className="w-4 h-4 text-primary" />
-                      <span className="text-sm text-slate-600 font-medium">+91 80 4123 5678</span>
+              <div className="bg-gray-50 p-8 rounded-2xl border border-gray-100 hover:shadow-lg transition-shadow duration-300">
+                <h3 className="font-black text-primary text-2xl mb-6 flex items-center gap-3">
+                  <span className="w-8 h-1 bg-accent rounded-full"></span>
+                  Contact Information
+                </h3>
+                <div className="grid sm:grid-cols-2 gap-8">
+                  <div className="space-y-6">
+                    <div className="flex items-center gap-4 group cursor-pointer">
+                      <div className="w-12 h-12 bg-white rounded-xl shadow-sm border border-gray-100 flex items-center justify-center text-accent group-hover:bg-accent group-hover:text-white transition-all duration-300 transform group-hover:-translate-y-1">
+                        <Phone className="w-5 h-5" />
+                      </div>
+                      <div>
+                        <p className="text-xs font-bold text-slate-400 uppercase tracking-wider mb-1">Call Us</p>
+                        <span className="text-sm text-primary font-bold">+91 80 4123 5678</span>
+                      </div>
                     </div>
-                    <div className="flex items-center gap-3">
-                      <Mail className="w-4 h-4 text-primary" />
-                      <span className="text-sm text-slate-600 font-medium">contact@jumshrs.com</span>
-                    </div>
-                    <div className="flex items-start gap-3">
-                      <Clock className="w-4 h-4 text-primary mt-1" />
-                      <span className="text-sm text-slate-600 font-medium">Monday - Friday<br />9:00 AM - 6:00 PM</span>
+                    <div className="flex items-center gap-4 group cursor-pointer">
+                      <div className="w-12 h-12 bg-white rounded-xl shadow-sm border border-gray-100 flex items-center justify-center text-accent group-hover:bg-accent group-hover:text-white transition-all duration-300 transform group-hover:-translate-y-1">
+                        <Mail className="w-5 h-5" />
+                      </div>
+                      <div>
+                        <p className="text-xs font-bold text-slate-400 uppercase tracking-wider mb-1">Email Us</p>
+                        <span className="text-sm text-primary font-bold">contact@jumshrs.com</span>
+                      </div>
                     </div>
                   </div>
-                  <div className="flex items-start gap-3">
-                    <MapPin className="w-4 h-4 text-primary mt-1 flex-shrink-0" />
-                    <span className="text-sm text-slate-600 font-medium leading-relaxed">Level 4, Corporate Tech Park,<br />MG Road, Bengaluru,<br />Karnataka 560001, India</span>
+                  <div className="space-y-6">
+                    <div className="flex items-start gap-4 group cursor-pointer">
+                      <div className="w-12 h-12 bg-white rounded-xl shadow-sm border border-gray-100 flex items-center justify-center text-accent group-hover:bg-accent group-hover:text-white transition-all duration-300 transform group-hover:-translate-y-1 flex-shrink-0">
+                        <MapPin className="w-5 h-5" />
+                      </div>
+                      <div>
+                        <p className="text-xs font-bold text-slate-400 uppercase tracking-wider mb-1">Visit Us</p>
+                        <span className="text-sm text-slate-600 font-medium leading-relaxed block">Level 4, Corporate Tech Park,<br />MG Road, Bengaluru 560001</span>
+                      </div>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -75,70 +105,84 @@ const Contact = () => {
             {/* Right Side: Form and Socials */}
             <FadeIn delay={0.2} direction="left" className="space-y-8">
               {/* Form Card */}
-              <div className="bg-white border-2 border-primary rounded-xl p-8 shadow-sm">
-                <h3 className="font-bold text-primary text-lg mb-6">Contact</h3>
-                <form className="space-y-4">
-                  <div className="grid grid-cols-2 gap-4">
-                    <input
-                      type="text"
-                      placeholder="Full Name"
-                      className="w-full border border-gray-200 rounded-md px-4 py-2.5 text-sm focus:outline-none focus:border-accent focus:ring-1 focus:ring-accent"
-                    />
-                    <input
-                      type="text"
-                      placeholder="Company Name"
-                      className="w-full border border-gray-200 rounded-md px-4 py-2.5 text-sm focus:outline-none focus:border-accent focus:ring-1 focus:ring-accent"
-                    />
-                  </div>
-                  <div className="grid grid-cols-2 gap-4">
-                    <input
-                      type="email"
-                      placeholder="Email Address"
-                      className="w-full border border-gray-200 rounded-md px-4 py-2.5 text-sm focus:outline-none focus:border-accent focus:ring-1 focus:ring-accent"
-                    />
-                    <input
-                      type="tel"
-                      placeholder="Phone Number"
-                      className="w-full border border-gray-200 rounded-md px-4 py-2.5 text-sm focus:outline-none focus:border-accent focus:ring-1 focus:ring-accent"
-                    />
-                  </div>
-                  <select className="w-full border border-gray-200 rounded-md px-4 py-2.5 text-sm focus:outline-none focus:border-accent focus:ring-1 focus:ring-accent text-slate-600">
-                    <option value="">Service Required</option>
-                    <option value="recruitment">Recruitment & Staffing</option>
-                    <option value="consulting">HR Consulting</option>
-                    <option value="payroll">Payroll Services</option>
-                    <option value="compliance">Compliance Services</option>
-                  </select>
-                  <textarea
-                    placeholder="Message"
-                    rows="5"
-                    className="w-full border border-gray-200 rounded-md px-4 py-2.5 text-sm focus:outline-none focus:border-accent focus:ring-1 focus:ring-accent resize-none"
-                  ></textarea>
-                  <div className="flex justify-end">
-                    <button
-                      type="button"
-                      className="bg-accent hover:bg-accent-hover text-white px-8 py-2.5 rounded-md font-bold text-sm transition-colors w-full sm:w-auto"
-                    >
-                      Send Message
-                    </button>
-                  </div>
-                </form>
-              </div>
-
-              {/* Social Media */}
-              <div>
-                <h3 className="font-bold text-primary text-lg mb-4">Social Media Us</h3>
-                <div className="flex gap-3">
-                  <a href="#" className="w-8 h-8 rounded-full bg-primary text-white flex items-center justify-center hover:bg-accent transition-colors">
-                    <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.469h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.469h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z" /></svg>
-                  </a>
-                  <a href="#" className="w-8 h-8 rounded-full bg-primary text-white flex items-center justify-center hover:bg-accent transition-colors">
-                    <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M23.953 4.57a10 10 0 01-2.825.775 4.958 4.958 0 002.163-2.723c-.951.555-2.005.959-3.127 1.184a4.92 4.92 0 00-8.384 4.482C7.69 8.095 4.067 6.13 1.64 3.162a4.822 4.822 0 00-.666 2.475c0 1.71.87 3.213 2.188 4.096a4.904 4.904 0 01-2.228-.616v.06a4.923 4.923 0 003.946 4.827 4.996 4.996 0 01-2.212.085 4.936 4.936 0 004.604 3.417 9.867 9.867 0 01-6.102 2.105c-.39 0-.779-.023-1.17-.067a13.995 13.995 0 007.557 2.209c9.053 0 13.998-7.496 13.998-13.985 0-.21 0-.42-.015-.63A9.935 9.935 0 0024 4.59z" /></svg>
-                  </a>
-                  <a href="#" className="w-8 h-8 rounded-full bg-primary text-white flex items-center justify-center hover:bg-accent transition-colors">
-                    <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z" /></svg>
-                  </a>
+              <div className="bg-white rounded-3xl p-8 sm:p-10 shadow-[0_20px_50px_-12px_rgba(0,0,0,0.1)] border border-gray-100 relative overflow-hidden group">
+                <div className="absolute top-0 right-0 w-64 h-64 bg-gradient-to-br from-accent/5 to-primary/5 rounded-full blur-3xl -z-10 group-hover:scale-150 transition-transform duration-700"></div>
+                
+                <div className="mb-8">
+                  <h3 className="font-black text-primary text-3xl mb-2">Send a Message</h3>
+                  <p className="text-slate-500 text-sm">We typically respond within 2 hours during business days.</p>
                 </div>
+                
+                <form className="space-y-5">
+                  <div className="grid sm:grid-cols-2 gap-5">
+                    <div className="relative">
+                      <input
+                        type="text"
+                        id="fullName"
+                        placeholder=" "
+                        className="peer w-full bg-gray-50/50 border border-gray-200 rounded-xl px-4 py-3.5 text-sm focus:outline-none focus:border-accent focus:bg-white focus:ring-4 focus:ring-accent/10 transition-all duration-300"
+                      />
+                      <label htmlFor="fullName" className="absolute left-4 top-3.5 text-slate-400 text-sm transition-all duration-300 peer-focus:-top-2.5 peer-focus:text-xs peer-focus:bg-white peer-focus:px-2 peer-focus:text-accent peer-not-placeholder-shown:-top-2.5 peer-not-placeholder-shown:text-xs peer-not-placeholder-shown:bg-white peer-not-placeholder-shown:px-2 cursor-text">Full Name</label>
+                    </div>
+                    <div className="relative">
+                      <input
+                        type="text"
+                        id="company"
+                        placeholder=" "
+                        className="peer w-full bg-gray-50/50 border border-gray-200 rounded-xl px-4 py-3.5 text-sm focus:outline-none focus:border-accent focus:bg-white focus:ring-4 focus:ring-accent/10 transition-all duration-300"
+                      />
+                      <label htmlFor="company" className="absolute left-4 top-3.5 text-slate-400 text-sm transition-all duration-300 peer-focus:-top-2.5 peer-focus:text-xs peer-focus:bg-white peer-focus:px-2 peer-focus:text-accent peer-not-placeholder-shown:-top-2.5 peer-not-placeholder-shown:text-xs peer-not-placeholder-shown:bg-white peer-not-placeholder-shown:px-2 cursor-text">Company Name</label>
+                    </div>
+                  </div>
+                  <div className="grid sm:grid-cols-2 gap-5">
+                    <div className="relative">
+                      <input
+                        type="email"
+                        id="email"
+                        placeholder=" "
+                        className="peer w-full bg-gray-50/50 border border-gray-200 rounded-xl px-4 py-3.5 text-sm focus:outline-none focus:border-accent focus:bg-white focus:ring-4 focus:ring-accent/10 transition-all duration-300"
+                      />
+                      <label htmlFor="email" className="absolute left-4 top-3.5 text-slate-400 text-sm transition-all duration-300 peer-focus:-top-2.5 peer-focus:text-xs peer-focus:bg-white peer-focus:px-2 peer-focus:text-accent peer-not-placeholder-shown:-top-2.5 peer-not-placeholder-shown:text-xs peer-not-placeholder-shown:bg-white peer-not-placeholder-shown:px-2 cursor-text">Email Address</label>
+                    </div>
+                    <div className="relative">
+                      <input
+                        type="tel"
+                        id="phone"
+                        placeholder=" "
+                        className="peer w-full bg-gray-50/50 border border-gray-200 rounded-xl px-4 py-3.5 text-sm focus:outline-none focus:border-accent focus:bg-white focus:ring-4 focus:ring-accent/10 transition-all duration-300"
+                      />
+                      <label htmlFor="phone" className="absolute left-4 top-3.5 text-slate-400 text-sm transition-all duration-300 peer-focus:-top-2.5 peer-focus:text-xs peer-focus:bg-white peer-focus:px-2 peer-focus:text-accent peer-not-placeholder-shown:-top-2.5 peer-not-placeholder-shown:text-xs peer-not-placeholder-shown:bg-white peer-not-placeholder-shown:px-2 cursor-text">Phone Number</label>
+                    </div>
+                  </div>
+                  <div className="relative">
+                    <select id="service" defaultValue="" className="peer w-full bg-gray-50/50 border border-gray-200 rounded-xl px-4 py-3.5 text-sm focus:outline-none focus:border-accent focus:bg-white focus:ring-4 focus:ring-accent/10 transition-all duration-300 text-slate-600 appearance-none">
+                      <option value="" disabled hidden></option>
+                      <option value="recruitment">Recruitment & Staffing</option>
+                      <option value="consulting">HR Consulting</option>
+                      <option value="payroll">Payroll Services</option>
+                      <option value="compliance">Compliance Services</option>
+                    </select>
+                    <label htmlFor="service" className="absolute left-4 top-3.5 text-slate-400 text-sm transition-all duration-300 peer-focus:-top-2.5 peer-focus:text-xs peer-focus:bg-white peer-focus:px-2 peer-focus:text-accent peer-valid:-top-2.5 peer-valid:text-xs peer-valid:bg-white peer-valid:px-2 cursor-pointer pointer-events-none">Service Required</label>
+                    <div className="absolute inset-y-0 right-4 flex items-center pointer-events-none">
+                      <svg className="w-4 h-4 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7"></path></svg>
+                    </div>
+                  </div>
+                  <div className="relative">
+                    <textarea
+                      id="message"
+                      placeholder=" "
+                      rows="4"
+                      className="peer w-full bg-gray-50/50 border border-gray-200 rounded-xl px-4 py-3.5 text-sm focus:outline-none focus:border-accent focus:bg-white focus:ring-4 focus:ring-accent/10 transition-all duration-300 resize-none"
+                    ></textarea>
+                    <label htmlFor="message" className="absolute left-4 top-3.5 text-slate-400 text-sm transition-all duration-300 peer-focus:-top-2.5 peer-focus:text-xs peer-focus:bg-white peer-focus:px-2 peer-focus:text-accent peer-not-placeholder-shown:-top-2.5 peer-not-placeholder-shown:text-xs peer-not-placeholder-shown:bg-white peer-not-placeholder-shown:px-2 cursor-text">How can we help you?</label>
+                  </div>
+                  <button
+                    type="button"
+                    className="w-full bg-gradient-to-r from-primary to-primary-light hover:from-accent hover:to-accent-hover text-white px-8 py-4 rounded-xl font-bold text-sm transition-all duration-300 shadow-lg shadow-primary/20 hover:shadow-accent/30 hover:-translate-y-1"
+                  >
+                    Send Message
+                  </button>
+                </form>
               </div>
             </FadeIn>
 

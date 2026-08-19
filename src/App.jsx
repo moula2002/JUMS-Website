@@ -15,11 +15,15 @@ import Contact from './pages/Contact';
 import Testimonials from './pages/Testimonials';
 import FAQs from './pages/FAQs';
 import NotFound from './pages/NotFound';
+import { ReactLenis } from 'lenis/react';
+import Blog from './pages/Blog';
 
 function App() {
+
   return (
-    <Router>
-      <ScrollToTop />
+    <ReactLenis root options={{ lerp: 0.08, smoothWheel: true }}>
+      <Router>
+        <ScrollToTop />
       <Routes>
         <Route path="/" element={<MainLayout />}>
           <Route index element={<Home />} />
@@ -34,11 +38,13 @@ function App() {
           <Route path="resources/:id" element={<BlogDetails />} />
           <Route path="contact" element={<Contact />} />
           <Route path="testimonials" element={<Testimonials />} />
+          <Route path="blog" element={<Blog />} />
           <Route path="faqs" element={<FAQs />} />
           <Route path="*" element={<NotFound />} />
         </Route>
       </Routes>
     </Router>
+    </ReactLenis>
   );
 }
 

@@ -22,6 +22,20 @@ const Testimonials = () => {
       role: 'Managing Director, NextGen',
       text: 'Partnering with JUMS for our staffing needs was the best decision. Their ethical approach and quick turnaround time have immensely helped our business scale rapidly.',
       image: '/images/testimonial-3.jpg'
+    },
+    {
+      id: 4,
+      name: 'Priya Desai',
+      role: 'Operations Head, GlobalTrade',
+      text: 'Their customized HR solutions have completely transformed our internal processes. The team at JUMS is proactive, professional, and truly understands our industry needs.',
+      image: '/images/testimonial-1.jpg'
+    },
+    {
+      id: 5,
+      name: 'Vikram Singh',
+      role: 'Founder, Startup Hub',
+      text: 'From talent acquisition to payroll management, they have been a pillar of support for our growing team. I highly recommend their comprehensive services to any startup.',
+      image: '/images/testimonial-2.jpg'
     }
   ];
 
@@ -31,11 +45,11 @@ const Testimonials = () => {
       <section className="bg-primary relative pt-16 pb-20 px-4 border-t border-white/10 overflow-hidden">
         <div className="absolute inset-0 bg-[url('/images/testimonials-bg.jpg')] bg-cover bg-center opacity-10 mix-blend-luminosity"></div>
         <div className="max-w-7xl mx-auto flex flex-col md:flex-row items-start md:items-center justify-between relative z-10 gap-6">
-          <div className="animate-fade-in">
+          <div>
             <h1 className="text-4xl md:text-5xl font-bold text-white mb-4">Client Testimonials</h1>
             <p className="text-gray-400 font-medium text-sm">Home <span className="mx-2 text-gray-600">/</span> Testimonials</p>
           </div>
-          <div className="animate-fade-in-left" style={{ animationDelay: '0.2s' }}>
+          <div>
             <p className="text-gray-300 max-w-md text-sm leading-relaxed border-l-2 border-accent pl-4">
               Discover how our innovative HR and staffing solutions have transformed organizations globally.
             </p>

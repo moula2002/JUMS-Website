@@ -39,11 +39,11 @@ const FAQs = () => {
       <section className="bg-primary relative pt-16 pb-20 px-4 border-t border-white/10 overflow-hidden">
         <div className="absolute inset-0 bg-[url('/images/faqs-bg.jpg')] bg-cover bg-center opacity-10 mix-blend-luminosity"></div>
         <div className="max-w-7xl mx-auto flex flex-col md:flex-row items-start md:items-center justify-between relative z-10 gap-6">
-          <div className="animate-fade-in">
+          <div>
             <h1 className="text-4xl md:text-5xl font-bold text-white mb-4">FAQs</h1>
             <p className="text-gray-400 font-medium text-sm">Home <span className="mx-2 text-gray-600">/</span> FAQs</p>
           </div>
-          <div className="animate-fade-in-left" style={{ animationDelay: '0.2s' }}>
+          <div>
             <p className="text-gray-300 max-w-md text-sm leading-relaxed border-l-2 border-accent pl-4">
               Find answers to common questions about our recruitment, staffing, and compliance services.
             </p>

@@ -1,8 +1,38 @@
+import { useState, useEffect } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import { Briefcase, MapPin, Clock, Calendar, Heart, CheckCircle2, Shield, Plane, TrendingUp } from 'lucide-react';
 
 const JobDetails = () => {
   const { id } = useParams();
+  const [job, setJob] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  useEffect(() => {
+    const fetchJob = async () => {
+      try {
+        const response = await fetch(`http://localhost:5000/api/jobs/${id}`);
+        if (!response.ok) {
+          throw new Error('Job not found');
+        }
+        const data = await response.json();
+        setJob(data);
+      } catch (err) {
+        setError(err.message);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchJob();
+  }, [id]);
+
+  if (loading) {
+    return <div className="min-h-screen flex items-center justify-center bg-gray-50"><p className="text-xl font-bold text-slate-500">Loading job details...</p></div>;
+  }
+
+  if (error || !job) {
+    return <div className="min-h-screen flex items-center justify-center bg-gray-50"><p className="text-xl font-bold text-red-500">{error || 'Job not found'}</p></div>;
+  }
 
   return (
     <div className="bg-gray-50 min-h-screen pb-20">
@@ -12,7 +42,7 @@ const JobDetails = () => {
         <div className="max-w-7xl mx-auto flex items-center justify-between relative z-10">
           <div>
             <h1 className="text-4xl md:text-5xl font-bold text-white mb-4">Job Details</h1>
-            <p className="text-gray-400 font-medium text-sm">Home <span className="mx-2 text-gray-600">/</span> Jobs <span className="mx-2 text-gray-600">/</span> HR Executive</p>
+            <p className="text-gray-400 font-medium text-sm">Home <span className="mx-2 text-gray-600">/</span> Jobs <span className="mx-2 text-gray-600">/</span> {job.title}</p>
           </div>
         </div>
       </section>
@@ -24,17 +54,17 @@ const JobDetails = () => {
           {/* Job Header */}
           <div className="flex flex-col md:flex-row md:items-start justify-between gap-6 border-b border-gray-100 pb-8 mb-8">
             <div>
-              <h2 className="text-3xl font-bold text-primary mb-4">HR Executive</h2>
+              <h2 className="text-3xl font-bold text-primary mb-4">{job.title}</h2>
               <div className="flex flex-wrap gap-4 text-xs font-semibold text-slate-500">
-                <span className="flex items-center gap-1"><MapPin className="w-3.5 h-3.5" /> Chennai</span>
-                <span className="flex items-center gap-1"><Clock className="w-3.5 h-3.5" /> Full Time</span>
-                <span className="flex items-center gap-1"><Briefcase className="w-3.5 h-3.5" /> 2-4 Years Experience</span>
-                <span className="flex items-center gap-1"><Calendar className="w-3.5 h-3.5" /> Posted 2 Days Ago</span>
+                <span className="flex items-center gap-1"><MapPin className="w-3.5 h-3.5" /> {job.location}</span>
+                <span className="flex items-center gap-1"><Clock className="w-3.5 h-3.5" /> {job.type}</span>
+                <span className="flex items-center gap-1"><Briefcase className="w-3.5 h-3.5" /> {job.experience}</span>
+                <span className="flex items-center gap-1"><Calendar className="w-3.5 h-3.5" /> Posted {new Date(job.createdAt).toLocaleDateString()}</span>
               </div>
             </div>
 
             <div className="flex gap-4">
-              <Link to={`/jobs/${id || '1'}/apply`} className="bg-accent hover:bg-accent-hover text-white px-8 py-3 rounded-xl font-bold transition-colors shadow-md text-sm">
+              <Link to={`/jobs/${job._id}/apply`} className="bg-accent hover:bg-accent-hover text-white px-8 py-3 rounded-xl font-bold transition-colors shadow-md text-sm">
                 Apply Now
               </Link>
               <button className="flex items-center justify-center px-6 border border-gray-200 text-slate-600 font-bold hover:text-accent hover:border-accent rounded-xl transition-colors text-sm">
@@ -49,16 +79,11 @@ const JobDetails = () => {
 
               <div>
                 <h3 className="text-xl font-bold text-primary mb-4">Job Description</h3>
-                <p className="text-slate-600 text-sm leading-relaxed mb-6">
-                  We are looking for a dynamic HR Executive to join our team. You will be responsible for managing HR functions and ensuring smooth HR operations.
+                <p className="text-slate-600 text-sm leading-relaxed mb-6 whitespace-pre-line">
+                  {job.jobDescription}
                 </p>
                 <ul className="space-y-3">
-                  {[
-                    'Manage end-to-end recruitment process',
-                    'Maintain employee records and HR database',
-                    'Coordinate with departments for HR requirements',
-                    'Ensure compliance with company policies'
-                  ].map((item, idx) => (
+                  {job.responsibilities && job.responsibilities.split('\n').filter(Boolean).map((item, idx) => (
                     <li key={idx} className="flex items-start gap-3 text-slate-600 text-sm font-medium">
                       <CheckCircle2 className="w-4 h-4 text-accent flex-shrink-0 mt-0.5" />
                       <span>{item}</span>
@@ -70,12 +95,7 @@ const JobDetails = () => {
               <div>
                 <h3 className="text-xl font-bold text-primary mb-4">Requirements</h3>
                 <ul className="space-y-3">
-                  {[
-                    "Bachelor's degree in HR or related field",
-                    "2-4 years of experience in HR role",
-                    "Good communication and interpersonal skills",
-                    "Proficiency in MS Office"
-                  ].map((item, idx) => (
+                  {job.requirements && job.requirements.split('\n').filter(Boolean).map((item, idx) => (
                     <li key={idx} className="flex items-start gap-3 text-slate-600 text-sm font-medium">
                       <div className="w-1.5 h-1.5 rounded-full bg-accent mt-1.5 flex-shrink-0"></div>
                       <span>{item}</span>
@@ -124,27 +144,27 @@ const JobDetails = () => {
                 <ul className="space-y-4">
                   <li className="flex justify-between border-b border-gray-200 pb-3">
                     <span className="text-slate-500 text-sm">Job Title</span>
-                    <span className="font-semibold text-slate-800 text-sm">HR Executive</span>
+                    <span className="font-semibold text-slate-800 text-sm text-right ml-4">{job.title}</span>
                   </li>
                   <li className="flex justify-between border-b border-gray-200 pb-3">
                     <span className="text-slate-500 text-sm">Job Type</span>
-                    <span className="font-semibold text-slate-800 text-sm">Full Time</span>
+                    <span className="font-semibold text-slate-800 text-sm text-right ml-4">{job.type}</span>
                   </li>
                   <li className="flex justify-between border-b border-gray-200 pb-3">
                     <span className="text-slate-500 text-sm">Experience</span>
-                    <span className="font-semibold text-slate-800 text-sm">2-4 Years</span>
+                    <span className="font-semibold text-slate-800 text-sm text-right ml-4">{job.experience}</span>
                   </li>
                   <li className="flex justify-between border-b border-gray-200 pb-3">
                     <span className="text-slate-500 text-sm">Location</span>
-                    <span className="font-semibold text-slate-800 text-sm">Chennai</span>
+                    <span className="font-semibold text-slate-800 text-sm text-right ml-4">{job.location}</span>
                   </li>
                   <li className="flex justify-between border-b border-gray-200 pb-3">
                     <span className="text-slate-500 text-sm">Salary</span>
-                    <span className="font-semibold text-slate-800 text-sm">₹3L - ₹5L</span>
+                    <span className="font-semibold text-slate-800 text-sm text-right ml-4">{job.salaryMin ? `₹${job.salaryMin} - ₹${job.salaryMax}` : 'Negotiable'}</span>
                   </li>
                   <li className="flex justify-between">
                     <span className="text-slate-500 text-sm">Industry</span>
-                    <span className="font-semibold text-slate-800 text-sm">Corporate Services</span>
+                    <span className="font-semibold text-slate-800 text-sm text-right ml-4">{job.department}</span>
                   </li>
                 </ul>
               </div>

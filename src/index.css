@@ -9,15 +9,24 @@
   --font-sans: "Outfit", system-ui, -apple-system, sans-serif;
 }
 
+@keyframes marquee {
+  0% { transform: translateX(0%); }
+  100% { transform: translateX(-100%); }
+}
+
 html {
-  scroll-behavior: smooth;
+  /* scroll-behavior managed by lenis */
 }
 
 body {
   @apply text-slate-800 antialiased font-sans;
   background: linear-gradient(135deg, #f0f4ff 0%, #fcf8ff 50%, #eff6ff 100%);
   background-attachment: scroll; /* Fixed lag issue */
+}
+
+#root {
   overflow-x: hidden;
+  width: 100%;
 }
 
 /* Custom scrollbar to match theme */
@@ -36,4 +45,21 @@ body {
 
 ::-webkit-scrollbar-thumb:hover {
   background: #a8a8a8;
+}
+
+/* Lenis Recommended Styles for Smooth Scrolling */
+html.lenis, html.lenis body {
+  height: auto;
+}
+.lenis.lenis-smooth {
+  scroll-behavior: auto !important;
+}
+.lenis.lenis-smooth [data-lenis-prevent] {
+  overscroll-behavior: contain;
+}
+.lenis.lenis-stopped {
+  overflow: hidden;
+}
+.lenis.lenis-scrolling iframe {
+  pointer-events: none;
 }

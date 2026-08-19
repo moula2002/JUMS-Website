@@ -26,7 +26,7 @@ const Jobs = () => {
         ...(category !== 'All Categories' && { category }),
         ...(location !== 'All Locations' && { location })
       });
-      const response = await fetch(`http://localhost:5000/api/jobs?${queryParams}`);
+      const response = await fetch(`https://jums-sever.onrender.com/api/jobs?${queryParams}`);
       if (response.ok) {
         const data = await response.json();
         setJobsList(data.jobs || []);
@@ -41,7 +41,7 @@ const Jobs = () => {
 
   const fetchCategories = async () => {
     try {
-      const response = await fetch('http://localhost:5000/api/jobs/categories');
+      const response = await fetch('https://jums-sever.onrender.com/api/jobs/categories');
       if (response.ok) {
         const data = await response.json();
         setCategoriesList(data.categories || []);

@@ -114,7 +114,15 @@ export default async function handler(req, res) {
           await fetch(`https://jums-sever.onrender.com/api/jobs/${jobId}/apply`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ fullName, email, phone, experience, coverLetter, skipEmail: true })
+            body: JSON.stringify({ 
+              fullName, 
+              email, 
+              phone, 
+              experience, 
+              coverLetter, 
+              skipEmail: true, 
+              resumeFileName: resumeFile ? (resumeFile.originalFilename || resumeFile.name) : 'No file'
+            })
           });
         }
       } catch (dbError) {

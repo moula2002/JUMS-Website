@@ -7,7 +7,7 @@ const ApplyJob = () => {
   const [job, setJob] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  
+
   // Form State
   const [formData, setFormData] = useState({
     fullName: '',
@@ -37,16 +37,16 @@ const ApplyJob = () => {
       const data = new FormData();
       Object.keys(formData).forEach(key => data.append(key, formData[key]));
       if (resumeFile) data.append('resume', resumeFile);
+      data.append('id', id);
 
-      const API_URL = import.meta.env.VITE_API_URL || 'https://jums-sever.onrender.com';
-      const response = await fetch(`${API_URL}/api/jobs/${id}/apply`, {
+      const response = await fetch(`/api/apply-job`, {
         method: 'POST',
         body: data
       });
 
       const result = await response.json();
       if (!response.ok) throw new Error(result.message || 'Failed to submit application');
-      
+
       setSubmitMessage({ type: 'success', text: 'Application submitted successfully! We will get back to you soon.' });
       setFormData({ fullName: '', email: '', phone: '', experience: '', coverLetter: '' });
       setResumeFile(null);

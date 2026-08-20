@@ -7,7 +7,7 @@ import { StaggerContainer, StaggerItem } from '../components/animations/Stagger'
 const Jobs = () => {
   const [jobsList, setJobsList] = useState([]);
   const [loading, setLoading] = useState(true);
-  
+
   const [keyword, setKeyword] = useState('');
   const [category, setCategory] = useState('All Categories');
   const [location, setLocation] = useState('All Locations');
@@ -155,15 +155,15 @@ const Jobs = () => {
               <FadeIn>
                 <div className="flex justify-center items-center gap-2 mt-12">
                   {Array.from({ length: totalPages }, (_, i) => i + 1).map(page => (
-                    <button 
-                      key={page} 
+                    <button
+                      key={page}
                       onClick={() => setCurrentPage(page)}
                       className={`w-10 h-10 flex items-center justify-center rounded-xl font-bold shadow-sm transition-colors ${currentPage === page ? 'bg-accent text-white' : 'bg-white text-slate-600 border border-gray-200 hover:bg-gray-50'}`}
                     >
                       {page}
                     </button>
                   ))}
-                  <button 
+                  <button
                     onClick={() => setCurrentPage(p => Math.min(totalPages, p + 1))}
                     disabled={currentPage === totalPages}
                     className="px-4 h-10 flex items-center justify-center rounded-xl bg-white text-primary border border-gray-200 hover:bg-gray-50 text-sm font-bold ml-2 disabled:opacity-50"
@@ -181,7 +181,7 @@ const Jobs = () => {
             <div className="bg-white p-8 rounded-2xl border border-gray-100 shadow-sm">
               <h3 className="text-lg font-bold text-primary mb-6">Job Categories</h3>
               <ul className="space-y-4">
-                <li 
+                <li
                   onClick={() => { setCategory('All Categories'); handleSearch(); }}
                   className={`flex justify-between items-center font-semibold text-sm cursor-pointer transition-colors ${category === 'All Categories' ? 'text-accent' : 'text-slate-600 hover:text-accent'}`}
                 >
@@ -189,8 +189,8 @@ const Jobs = () => {
                   <span className={`${category === 'All Categories' ? 'bg-accent/10 text-accent' : 'bg-gray-50 border-gray-100 text-slate-500'} px-2.5 py-0.5 rounded-full text-xs border`}>{totalJobsCount}</span>
                 </li>
                 {categoriesList.map((cat, idx) => (
-                  <li 
-                    key={idx} 
+                  <li
+                    key={idx}
                     onClick={() => { setCategory(cat.name); handleSearch(); }}
                     className={`flex justify-between items-center cursor-pointer text-sm font-medium transition-colors ${category === cat.name ? 'text-accent' : 'text-slate-600 hover:text-accent'}`}
                   >

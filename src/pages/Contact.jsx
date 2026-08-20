@@ -12,7 +12,7 @@ const Contact = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setStatus({ loading: true, success: false, error: null });
-    
+
     try {
       // Map frontend fields to backend fields
       const payload = {
@@ -22,8 +22,7 @@ const Contact = () => {
         message: `Phone: ${formData.phone}\nCompany: ${formData.company}\n\n${formData.message}`
       };
 
-      const API_URL = import.meta.env.VITE_API_URL || 'https://jums-sever.onrender.com';
-      const response = await fetch(`${API_URL}/api/forms/contact`, {
+      const response = await fetch(`/api/contact`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(payload)
@@ -49,8 +48,8 @@ const Contact = () => {
             <span className="inline-block px-3 py-1 bg-white/20 backdrop-blur-md border border-white/30 text-white rounded-full text-xs font-bold tracking-widest uppercase mb-4">Contact Us</span>
             <h1 className="text-4xl md:text-5xl lg:text-6xl font-black text-white mb-4 tracking-tight drop-shadow-md">Get In Touch</h1>
             <p className="text-white/80 font-medium text-sm flex items-center gap-2">
-              <span className="hover:text-white transition-colors cursor-pointer">Home</span> 
-              <span className="w-1.5 h-1.5 rounded-full bg-accent"></span> 
+              <span className="hover:text-white transition-colors cursor-pointer">Home</span>
+              <span className="w-1.5 h-1.5 rounded-full bg-accent"></span>
               <span className="text-white">Contact Us</span>
             </p>
           </FadeIn>
@@ -79,13 +78,13 @@ const Contact = () => {
                   className="w-full h-full object-cover opacity-90 group-hover:scale-110 transition-transform duration-700 ease-in-out"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-primary/80 via-transparent to-transparent opacity-60"></div>
-                
+
                 {/* Map Controls Mockup */}
                 <div className="absolute top-4 left-4 bg-white/90 backdrop-blur-sm rounded-lg shadow-lg flex text-xs font-bold border border-white/50 overflow-hidden transform-gpu hover:scale-105 transition-transform cursor-pointer">
                   <div className="px-4 py-2 bg-primary text-white">Map</div>
                   <div className="px-4 py-2 text-primary hover:bg-gray-50 transition-colors">Satellite</div>
                 </div>
-                
+
                 <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 flex flex-col items-center">
                   <div className="bg-white px-4 py-2 rounded-lg shadow-xl text-xs font-bold text-primary mb-2 animate-bounce">Bengaluru HQ</div>
                   <div className="relative">
@@ -142,12 +141,12 @@ const Contact = () => {
               {/* Form Card */}
               <div className="bg-white rounded-3xl p-8 sm:p-10 shadow-[0_20px_50px_-12px_rgba(0,0,0,0.1)] border border-gray-100 relative overflow-hidden group">
                 <div className="absolute top-0 right-0 w-64 h-64 bg-gradient-to-br from-accent/5 to-primary/5 rounded-full blur-3xl -z-10 group-hover:scale-150 transition-transform duration-700"></div>
-                
+
                 <div className="mb-8">
                   <h3 className="font-black text-primary text-3xl mb-2">Send a Message</h3>
                   <p className="text-slate-500 text-sm">We typically respond within 2 hours during business days.</p>
                 </div>
-                
+
                 <form className="space-y-5" onSubmit={handleSubmit}>
                   {status.success && <div className="bg-green-50 text-green-700 p-3 rounded-lg text-sm mb-4">Message sent successfully! We will get back to you soon.</div>}
                   {status.error && <div className="bg-red-50 text-red-700 p-3 rounded-lg text-sm mb-4">{status.error}</div>}

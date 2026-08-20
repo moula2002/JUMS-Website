@@ -1,0 +1,134 @@
+import nodemailer from 'nodemailer';
+
+export default async function handler(req, res) {
+  if (req.method !== 'POST') {
+    return res.status(405).json({ message: 'Method not allowed' });
+  }
+
+  try {
+    let { name, email, phone, subject, message } = req.body;
+    
+    name = name || 'Not Provided';
+    email = email || 'Not Provided';
+    phone = phone || 'Not Provided';
+    subject = subject || 'No Subject';
+    message = message || 'No message provided';
+
+    if (!process.env.SMTP_USER || !process.env.SMTP_PASS) {
+      console.error('SMTP Configuration Error: Credentials are missing.');
+      return res.status(500).json({ 
+        success: false, 
+        message: 'Server Configuration Error: SMTP credentials are missing.' 
+      });
+    }
+
+    const transporter = nodemailer.createTransport({
+      service: 'gmail',
+      auth: {
+        user: process.env.SMTP_USER,
+        pass: process.env.SMTP_PASS,
+      },
+    });
+
+    const htmlContent = `
+      <!DOCTYPE html>
+      <html>
+      <head>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <style>
+          body { font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; background-color: #f8fafc; margin: 0; padding: 0; -webkit-font-smoothing: antialiased; }
+          .container { max-width: 600px; margin: 40px auto; background-color: #ffffff; border-radius: 12px; overflow: hidden; box-shadow: 0 10px 25px rgba(0,0,0,0.05); border: 1px solid #e2e8f0; }
+          .header { background-color: #1e3a8a; padding: 35px 30px; text-align: center; border-bottom: 4px solid #f59e0b; }
+          .header h1 { color: #ffffff; margin: 0; font-size: 28px; font-weight: 800; letter-spacing: 1px; }
+          .header p { color: #94a3b8; margin: 12px 0 0 0; font-size: 13px; text-transform: uppercase; letter-spacing: 2px; font-weight: 600; }
+          .content { padding: 40px 35px; }
+          .field { margin-bottom: 25px; border-bottom: 1px solid #f1f5f9; padding-bottom: 16px; }
+          .field:last-child { border-bottom: none; margin-bottom: 0; padding-bottom: 0; }
+          .label { font-size: 12px; color: #64748b; text-transform: uppercase; font-weight: 700; letter-spacing: 1px; margin-bottom: 8px; display: block; }
+          .value { font-size: 16px; color: #0f172a; font-weight: 600; margin: 0; word-break: break-word; }
+          .message-box { background-color: #f8fafc; border: 1px solid #e2e8f0; padding: 20px; border-radius: 8px; margin-top: 12px; }
+          .message-text { color: #334155; font-size: 15px; line-height: 1.6; margin: 0; white-space: pre-wrap; font-weight: 500; word-break: break-word; }
+          .footer { background-color: #f1f5f9; padding: 25px; text-align: center; border-top: 1px solid #e2e8f0; }
+          .footer p { margin: 0; color: #64748b; font-size: 13px; font-weight: 500; }
+          
+          /* Mobile Responsiveness */
+          @media screen and (max-width: 600px) {
+            .container { margin: 15px auto !important; width: 95% !important; border-radius: 8px !important; }
+            .header { padding: 25px 20px !important; }
+            .header h1 { font-size: 24px !important; }
+            .content { padding: 25px 20px !important; }
+            .field { margin-bottom: 20px; }
+            .value { font-size: 15px !important; }
+            .message-box { padding: 15px !important; }
+            .message-text { font-size: 14px !important; }
+          }
+        </style>
+      </head>
+      <body>
+        <div class="container">
+          <div class="header">
+            <h1>JUMS <span style="color: #f59e0b;">Corporate Solutions</span></h1>
+            <p>New Contact Form Submission</p>
+          </div>
+          <div class="content">
+            <div class="field">
+              <span class="label">Full Name</span>
+              <p class="value">${name}</p>
+            </div>
+            <div class="field">
+              <span class="label">Email Address</span>
+              <p class="value"><a href="mailto:${email}" style="color: #1e3a8a; text-decoration: none;">${email}</a></p>
+            </div>
+            <div class="field">
+              <span class="label">Phone Number</span>
+              <p class="value"><a href="tel:${phone}" style="color: #0f172a; text-decoration: none;">${phone}</a></p>
+            </div>
+            <div class="field">
+              <span class="label">Subject</span>
+              <p class="value">${subject}</p>
+            </div>
+            <div class="field">
+              <span class="label">Message</span>
+              <div class="message-box">
+                <p class="message-text">${message}</p>
+              </div>
+            </div>
+          </div>
+          <div class="footer">
+            <p>This is an automated message from the JUMS Corporate Solutions website.</p>
+          </div>
+        </div>
+      </body>
+      </html>
+    `;
+
+    await transporter.sendMail({
+      from: `"JUMS Website" <${process.env.SMTP_FROM || process.env.SMTP_USER}>`,
+      to: process.env.SMTP_TO_ADMIN || process.env.SMTP_USER,
+      subject: `New Contact Submission from ${name}`,
+      html: htmlContent,
+    });
+
+    // Forward to backend to save in database (optional but matches Hi-Tech architecture)
+    try {
+      // Pass a flag to indicate the backend shouldn't send another email
+      await fetch('https://jums-sever.onrender.com/api/forms/contact', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ name, email, subject, message, phone, skipEmail: true })
+      });
+    } catch (dbError) {
+      console.error('Failed to save to Render database:', dbError);
+    }
+
+    return res.status(200).json({ success: true, message: 'Email sent successfully!' });
+
+  } catch (error) {
+    console.error('Error sending email:', error);
+    return res.status(500).json({ 
+      success: false, 
+      message: 'Failed to send email.',
+      error: error.message 
+    });
+  }
+}

@@ -105,25 +105,35 @@ export default async function handler(req, res) {
 
       await transporter.sendMail(mailOptions);
 
-      // We do not forward the file to the DB backend, just the metadata, 
-      // since Render ephemeral disk would lose the file anyway and it's attached in the email.
-      // Or we can construct a FormData to forward it. Let's just forward the text metadata.
+      // Forward the file to the DB backend
       try {
         const jobId = Array.isArray(fields.id) ? fields.id[0] : fields.id;
         if (jobId) {
-          await fetch(`https://jums-sever.onrender.com/api/jobs/${jobId}/apply`, {
+          const backendFormData = new FormData();
+          backendFormData.append('fullName', fullName);
+          backendFormData.append('email', email);
+          backendFormData.append('phone', phone);
+          backendFormData.append('experience', experience);
+          backendFormData.append('coverLetter', coverLetter);
+          backendFormData.append('skipEmail', 'true');
+          
+          if (resumeFile) {
+            const filePath = resumeFile.filepath || resumeFile.path;
+            if (filePath && fs.existsSync(filePath)) {
+              const fileBuffer = fs.readFileSync(filePath);
+              const blob = new Blob([fileBuffer], { type: resumeFile.mimetype || 'application/pdf' });
+              backendFormData.append('resume', blob, resumeFile.originalFilename || resumeFile.name);
+            }
+          }
+
+          const response = await fetch(`https://jums-sever.onrender.com/api/jobs/${jobId}/apply`, {
             method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ 
-              fullName, 
-              email, 
-              phone, 
-              experience, 
-              coverLetter, 
-              skipEmail: true, 
-              resumeFileName: resumeFile ? (resumeFile.originalFilename || resumeFile.name) : 'No file'
-            })
+            body: backendFormData
           });
+          
+          if (!response.ok) {
+            console.error('Backend responded with status:', response.status);
+          }
         }
       } catch (dbError) {
         console.error('Failed to log to database:', dbError);

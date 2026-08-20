@@ -15,7 +15,11 @@ export default async function handler(req, res) {
   }
 
   try {
-    const form = formidable({ maxFileSize: 4.5 * 1024 * 1024 }); // 4.5MB limit for Vercel
+    const form = formidable({ 
+      maxFileSize: 4.5 * 1024 * 1024,
+      uploadDir: '/tmp',
+      keepExtensions: true
+    });
 
     form.parse(req, async (err, fields, files) => {
       if (err) {

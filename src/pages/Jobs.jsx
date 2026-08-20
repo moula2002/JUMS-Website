@@ -14,6 +14,7 @@ const Jobs = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
   const [categoriesList, setCategoriesList] = useState([]);
+  const [locationsList, setLocationsList] = useState([]);
   const [totalJobsCount, setTotalJobsCount] = useState(0);
 
   const fetchJobs = async () => {
@@ -52,12 +53,25 @@ const Jobs = () => {
     }
   };
 
+  const fetchLocations = async () => {
+    try {
+      const response = await fetch('https://jums-sever.onrender.com/api/jobs/locations');
+      if (response.ok) {
+        const data = await response.json();
+        setLocationsList(data.locations || []);
+      }
+    } catch (error) {
+      console.error('Error fetching locations:', error);
+    }
+  };
+
   useEffect(() => {
     fetchJobs();
   }, [currentPage]);
 
   useEffect(() => {
     fetchCategories();
+    fetchLocations();
   }, []);
 
   const handleSearch = () => {
@@ -109,8 +123,7 @@ const Jobs = () => {
               <MapPin className="text-gray-400 w-5 h-5 mr-3 flex-shrink-0" />
               <select className="w-full bg-transparent focus:outline-none text-sm text-slate-700 appearance-none font-medium" value={location} onChange={(e) => setLocation(e.target.value)}>
                 <option value="All Locations">All Locations</option>
-                <option value="Chennai">Chennai</option>
-                <option value="Bangalore">Bangalore</option>
+                {locationsList.map(loc => <option key={loc.name} value={loc.name}>{loc.name}</option>)}
               </select>
             </div>
             <button onClick={handleSearch} className="bg-accent hover:bg-accent-hover text-white px-8 py-3.5 rounded-xl md:rounded-full font-bold transition-colors shadow-md md:ml-2">
